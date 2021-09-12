@@ -13,4 +13,8 @@ def successful_login(login_manager):
     valid_till = parsed['valid_till']
     diff = date_diff(valid_till, today())
     if diff < 0:
-        frappe.throw(_("You site is suspended. Please contact Sales"), frappe.AuthenticationError)
+        frappe.throw(_("Your subscription has expired.  Please renew your subscription."), frappe.AuthenticationError)
+
+    warning_before_days = parsed['warning_before_days']
+    if diff <= warning_before_days:
+        frappe.msgprint(_("Your subscription has expired. To keep using App without intruption activate it before '{0}' DAYS").format(diff))
